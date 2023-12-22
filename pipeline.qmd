@@ -1,0 +1,34 @@
+---
+title: "Pipeline"
+author: "DSFans"
+format: html
+---
+
+## Подготовка
+
+```{r}
+library(tidyverse)
+```
+
+
+## Импорт
+
+```{r}
+
+rd_network <- readr::read_csv2("../data/road_network.csv")
+glimpse(rd_network)
+
+```
+
+```{r}
+
+routers <- readr::read_csv2("../data/wifi_routers.csv")
+
+routers <- routers %>% 
+  tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lat", "lon")) %>% 
+  mutate(lat = stringr::str_replace(lat, "\\(","") %>% as.numeric()) %>% 
+  mutate(lon = stringr::str_replace(lon, "\\)","") %>% as.numeric())
+
+```
+
+
