@@ -29,27 +29,29 @@ routers <- readr::read_csv2("data/wifi_routers.csv")
 + Установка ClickHouse на виртуальный сервер
 + Загрузка данных в ClickHouse `cat $(ls | grep wifi_logs_.*.csv) | tr ';' ',' | tr -d '"' | clickhouse-client`
 <br>
+
 ## Проведение разведочного анализа данных
 +  Проанализированы изменения дорожно-транспортной ситуации скорости движения в течении дня на основе перемещений между роутери       
-  <br>Утренние часы ``     
+  <br>
+Утро      
 <img src="./img/sunrise.jpeg" height="500" width="835"></img>
-  Полдень ``   
+Полдень    
 <img src="./img/day.jpeg" height="500" width="835"></img>
-  Вечернее время ``   
+Вечер    
 <img src="./img/sunset.jpeg" height="500" width="835"></img>
-+ Определены зоны с низким потоком трафика
+Определены зоны с низким потоком трафика
 <img src="./img/stats_problem_zones.jpeg" height="500" width="835"></img>
-+ Построена временная шкала по неделям нагруженности транспортных узлов
-<img src="./img/nofile.jpeg" height="500" width="835"></img>
-<br>
-## Составление матрицы перемещений
+Построена временная шкала по неделям нагруженности транспортных узлов
+<img src="./img/nofile.jpeg" height="500" width="835"></img><br>
+   
+## Составление матрицы перемещений     
 +  Матрица передвижений по городу
-<p><img src="./img/realmap02.PNG" height="500" width="460"></img><img src="./img/ctymap.PNG" height="500" width="460"></img></p>
-<br>
+<p><img src="./img/realmap02.PNG" height="500" width="460"></img><img src="./img/ctymap.PNG" height="500" width="460"></img></p><br>
+
 ## Визуализация данных
 + Построена тепловая карта наиболее используемых роутеров        
-<img src="./img/poprouts.jpeg" height="500" width="835"></img>
-<br>
+<img src="./img/poprouts.jpeg" height="500" width="835"></img><br>
+
 ## Предоставление комментариев
 ### В ходе проведённой работы были выроботаны рекомендации относительно эффективного расположения роутеров
 + Необходимо переместить роутеры с низкой проходимостью
