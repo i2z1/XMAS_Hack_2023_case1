@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>DSFans_XMAS - Подготовка данных</title>
+<title>DSFans_XMAS - Перемещение – среднее время</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -127,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Главная</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./data_preparation.html" aria-current="page"> 
+    <a class="nav-link" href="./data_preparation.html"> 
 <span class="menu-text">Подготовка данных</span></a>
   </li>  
   <li class="nav-item">
@@ -139,7 +139,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Clickhouse магия</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./speed.html"> 
+    <a class="nav-link active" href="./speed.html" aria-current="page"> 
 <span class="menu-text">Перемещение – среднее время</span></a>
   </li>  
   <li class="nav-item">
@@ -166,10 +166,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#подготовка-рабочего-окружения" id="toc-подготовка-рабочего-окружения" class="nav-link active" data-scroll-target="#подготовка-рабочего-окружения">Подготовка рабочего окружения</a></li>
-  <li><a href="#импорт" id="toc-импорт" class="nav-link" data-scroll-target="#импорт">Импорт</a>
+  <li><a href="#среднее-время-поездки" id="toc-среднее-время-поездки" class="nav-link active" data-scroll-target="#среднее-время-поездки">Среднее время поездки</a>
   <ul class="collapse">
-  <li><a href="#расстояния" id="toc-расстояния" class="nav-link" data-scroll-target="#расстояния">Расстояния</a></li>
+  <li><a href="#утро" id="toc-утро" class="nav-link" data-scroll-target="#утро">Утро</a></li>
+  <li><a href="#день" id="toc-день" class="nav-link" data-scroll-target="#день">День</a></li>
+  <li><a href="#вечер" id="toc-вечер" class="nav-link" data-scroll-target="#вечер">Вечер</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -179,7 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Подготовка данных</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Перемещение – среднее время</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -196,80 +197,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="подготовка-рабочего-окружения" class="level2">
-<h2 class="anchored" data-anchor-id="подготовка-рабочего-окружения">Подготовка рабочего окружения</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>А вот код!</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<section id="среднее-время-поездки" class="level2">
+<h2 class="anchored" data-anchor-id="среднее-время-поездки">Среднее время поездки</h2>
+<section id="утро" class="level3">
+<h3 class="anchored" data-anchor-id="утро">Утро</h3>
 </section>
-<section id="импорт" class="level2">
-<h2 class="anchored" data-anchor-id="импорт">Импорт</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>А вот код!</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|eval: false </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>rd_network <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv2</span>(<span class="st">"https://storage.yandexcloud.net/roadgraph/road_network.csv"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(rd_network)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 349,753
-Columns: 6
-$ geom           &lt;chr&gt; "LINESTRING (37.081866 54.504539,37.081866 54.50443,37.…
-$ from_vertex_id &lt;dbl&gt; 3652, 58925, 58925, 248317, 24102, 52561, 96152, 169402…
-$ to_vertex_id   &lt;dbl&gt; 3650, 69671, 69510, 248315, 24100, 52559, 96154, 169400…
-$ weight         &lt;dbl&gt; 1.784126e+16, 4.689159e+16, 6.011167e+16, 1.951298e+16,…
-$ was_one_way    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-$ group_id       &lt;dbl&gt; 42993, NA, NA, NA, 41418, NA, NA, NA, NA, NA, NA, NA, N…</code></pre>
-</div>
-</div>
-<p>Роутеры</p>
-<div class="cell">
-<details class="code-fold">
-<summary>А вот код!</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>routers <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv2</span>(<span class="st">"data/wifi_routers.csv"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>routers <span class="ot">&lt;-</span> routers <span class="sc">%&gt;%</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(geom, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names=</span><span class="fu">c</span>(<span class="st">"point"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lat =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(lat, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>,<span class="st">""</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lon =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(lon, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>routers <span class="sc">%&gt;%</span> <span class="fu">select</span>(guid, lat, lon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 29 × 3
-   guid                                   lat   lon
-   &lt;chr&gt;                                &lt;dbl&gt; &lt;dbl&gt;
- 1 0648078a-9d45-4577-af14-12b49e8f017b  37.6  54.2
- 2 6422a0a5-2c2d-4610-bebc-91722ea37827  37.6  54.2
- 3 b17aefd3-8431-4054-a0b5-b0a26eeb9f14  37.6  54.2
- 4 92c1cc9e-cfa4-4ef0-91f0-c0a158f547e7  37.6  54.2
- 5 f0058c02-034f-429a-b932-8638089d8718  37.6  54.2
- 6 37cea6a6-eaaa-4e12-9b4b-b444163a2cc8  37.6  54.2
- 7 07190dec-be71-44a2-8d64-c24fb51ebc7b  37.6  54.2
- 8 8a823f01-771f-420e-8971-928cba314a24  37.6  54.2
- 9 8a734674-e451-4fe1-8b50-3b3b46e334a1  37.6  54.2
-10 cdcab165-cc3a-460f-ae99-024216190ab1  37.6  54.2
-# ℹ 19 more rows</code></pre>
-</div>
-</div>
-<section id="расстояния" class="level3">
-<h3 class="anchored" data-anchor-id="расстояния">Расстояния</h3>
-<div class="cell">
-<details class="code-fold">
-<summary>А вот код!</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|eval: false</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>httr2<span class="sc">::</span><span class="fu">request</span>(<span class="st">"https://graphhopper.com/api/1/route"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_method</span>(<span class="st">"POST"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<section id="день" class="level3">
+<h3 class="anchored" data-anchor-id="день">День</h3>
+</section>
+<section id="вечер" class="level3">
+<h3 class="anchored" data-anchor-id="вечер">Вечер</h3>
 
 
 <!-- -->
@@ -711,56 +648,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Подготовка данных"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">  error: false</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Подготовка рабочего окружения</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Импорт</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#|eval: false </span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>rd_network <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv2</span>(<span class="st">"https://storage.yandexcloud.net/roadgraph/road_network.csv"</span>)</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(rd_network)</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>Роутеры</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>routers <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv2</span>(<span class="st">"data/wifi_routers.csv"</span>)</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>routers <span class="ot">&lt;-</span> routers <span class="sc">%&gt;%</span> </span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(geom, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names=</span><span class="fu">c</span>(<span class="st">"point"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lat =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(lat, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>,<span class="st">""</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lon =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(lon, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>())</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>routers <span class="sc">%&gt;%</span> <span class="fu">select</span>(guid, lat, lon)</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Расстояния</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#|eval: false</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>httr2<span class="sc">::</span><span class="fu">request</span>(<span class="st">"https://graphhopper.com/api/1/route"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_method</span>(<span class="st">"POST"</span>)</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Перемещение -- среднее время"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Среднее время поездки</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### Утро</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">### День</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">### Вечер </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
