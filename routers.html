@@ -190,30 +190,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="вычисление-расстояний-между-роутерами">Вычисление расстояний между роутерами</h2>
 <pre><code>import osmnx as ox
 import networkx as nx
+import csv
 
-start_latlng = (37.618886, 54.204617)
-end_latlng = (37.619182, 54.205679)
+points = [(37.618886,54.204617),
+          (37.5826629190378,54.1688958982062),
+          (37.5931054621157,54.1854456631672),
+          (37.5726628595483,54.1691301221863),
+          (37.6230252453024,54.2347433816421),
+          (37.616479,54.191903),
+          (37.622509,54.2128),
+          (37.611688,54.195984),
+          (37.625018,54.218076),
+          (37.622566,54.189654),
+          (37.604794,54.18133),
+          (37.614096,54.193204),
+          (37.6286864157148,54.2276569624141),
+          (37.6245072514748,54.2333462654037),
+          (37.67935,54.219052),
+          (37.6182365086987,54.2413214831852),
+          (37.627888,54.191341),
+          (37.6119371506259,54.2491761841739),
+          (37.625265,54.190082),
+          (37.620844,54.2101),
+          (37.5855121948686,54.1714546891764),
+          (37.5799264475165,54.1666267574838),
+          (37.5754334510529,54.1718766491252),
+          (37.619014,54.191034),
+          (37.5946593824111,54.1646166190679),
+          (37.5974766750285,54.1839287967087),
+          (37.619966,54.208412),
+          (37.614644,54.200674),
+          (37.619182,54.205679)
+          ]
 
-mode = 'drive' # 'drive', 'bike', 'walk'
-
-optimizer = 'time' # 'length','time'
-
-center = (54.203918,37.618391) # меняем местами
-graph = ox.graph_from_point(center,3000,dist_type='network',simplify=True)
-
-orig_node = ox.distance.nearest_nodes(graph,start_latlng[0],start_latlng[1])
-
-dest_node = ox.distance.nearest_nodes(graph, end_latlng[0],end_latlng[1])
-
-shortest_route = nx.shortest_path(graph, orig_node,dest_node,
-                                  weight=optimizer)
-
-print(shortest_route)
-print("dist - ",nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length'))
-shortest_route_map = ox.plot_route_folium(graph, shortest_route)
+with open("marshruts_lengts.csv","w") as file:
+    writer = csv.writer(file)
+    writer.writerow(("from","to","length"))
 
 
-shortest_route_map.save('route.html')
+mode = 'drive'
+optimizer = 'length'
+center = (54.203918, 37.618391)  # меняем местами
+graph = ox.graph_from_point(center, 20000, dist_type='network', simplify=True)
+
+for i in range(0,len(points)):
+    for j in range(0,len(points)):
+        if i == j:
+            continue
+
+        orig_node = ox.distance.nearest_nodes(graph,points[i][0],points[i][1])
+
+        dest_node = ox.distance.nearest_nodes(graph, points[j][0],points[j][1])
+
+        shortest_route = nx.shortest_path(graph, orig_node,dest_node,
+                                          weight=optimizer)
+        length = nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length')
+        newRow = [str(points[i][0]) + ' ' + str(points[i][1]),str(points[j][0]) + ' ' + str(points[j][1]),length]
+        with open("marshruts_lengts.csv","a") as file:
+            writer = csv.writer(file)
+            writer.writerow(newRow)
 </code></pre>
 </section>
 <section id="результат" class="level2">
@@ -682,41 +717,76 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="in">import osmnx as ox</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="in">import networkx as nx</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="in">start_latlng = (37.618886, 54.204617)</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">end_latlng = (37.619182, 54.205679)</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">mode = 'drive' # 'drive', 'bike', 'walk'</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="in">optimizer = 'time' # 'length','time'</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="in">center = (54.203918,37.618391) # меняем местами</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">graph = ox.graph_from_point(center,3000,dist_type='network',simplify=True)</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">orig_node = ox.distance.nearest_nodes(graph,start_latlng[0],start_latlng[1])</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">dest_node = ox.distance.nearest_nodes(graph, end_latlng[0],end_latlng[1])</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">shortest_route = nx.shortest_path(graph, orig_node,dest_node,</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">                                  weight=optimizer)</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in">print(shortest_route)</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">print("dist - ",nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length'))</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">shortest_route_map = ox.plot_route_folium(graph, shortest_route)</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">shortest_route_map.save('route.html')</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Результат</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Датасет</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>https://storage.yandexcloud.net/roadgraph/marshruts_lengts.csv</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="in">import csv</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">points = [(37.618886,54.204617),</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5826629190378,54.1688958982062),</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5931054621157,54.1854456631672),</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5726628595483,54.1691301221863),</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.6230252453024,54.2347433816421),</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.616479,54.191903),</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.622509,54.2128),</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.611688,54.195984),</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.625018,54.218076),</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.622566,54.189654),</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.604794,54.18133),</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.614096,54.193204),</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.6286864157148,54.2276569624141),</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.6245072514748,54.2333462654037),</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.67935,54.219052),</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.6182365086987,54.2413214831852),</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.627888,54.191341),</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.6119371506259,54.2491761841739),</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.625265,54.190082),</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.620844,54.2101),</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5855121948686,54.1714546891764),</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5799264475165,54.1666267574838),</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5754334510529,54.1718766491252),</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.619014,54.191034),</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5946593824111,54.1646166190679),</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.5974766750285,54.1839287967087),</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.619966,54.208412),</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.614644,54.200674),</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="in">          (37.619182,54.205679)</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="in">          ]</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">with open("marshruts_lengts.csv","w") as file:</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">    writer = csv.writer(file)</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">    writer.writerow(("from","to","length"))</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">mode = 'drive'</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="in">optimizer = 'length'</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="in">center = (54.203918, 37.618391)  # меняем местами</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">graph = ox.graph_from_point(center, 20000, dist_type='network', simplify=True)</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="in">for i in range(0,len(points)):</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="in">    for j in range(0,len(points)):</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="in">        if i == j:</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">            continue</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="in">        orig_node = ox.distance.nearest_nodes(graph,points[i][0],points[i][1])</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="in">        dest_node = ox.distance.nearest_nodes(graph, points[j][0],points[j][1])</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="in">        shortest_route = nx.shortest_path(graph, orig_node,dest_node,</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="in">                                          weight=optimizer)</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="in">        length = nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length')</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="in">        newRow = [str(points[i][0]) + ' ' + str(points[i][1]),str(points[j][0]) + ' ' + str(points[j][1]),length]</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="in">        with open("marshruts_lengts.csv","a") as file:</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="in">            writer = csv.writer(file)</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="in">            writer.writerow(newRow)</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## Результат</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## Датасет</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>https://storage.yandexcloud.net/roadgraph/marshruts_lengts.csv</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
