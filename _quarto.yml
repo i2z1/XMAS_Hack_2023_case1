@@ -8,6 +8,7 @@ website:
       - href: index.qmd
         text: Главная
       - data_preparation.qmd
+      - clickhouse.qmd
       - about.qmd
 
 format:
@@ -17,6 +18,13 @@ format:
     toc: true
     code-fold: true
     code-summary: "А вот код!"
+    code-tools: true
+
+execute: 
+  freeze: auto
+  warning: false
+  error: false
+
     
 
 
