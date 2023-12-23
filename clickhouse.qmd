@@ -79,6 +79,8 @@ tbl(con, "rdst") %>%
 
 <https://www.programmersought.com/article/532510185734/>
 
+-- поэтому пока ...
+
 
 
 ## Proof-of-Concept решение
