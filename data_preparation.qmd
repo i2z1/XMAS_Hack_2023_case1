@@ -14,8 +14,9 @@ library(tidyverse)
 ## Импорт
 
 ```{r}
+#|eval: false 
 
-rd_network <- readr::read_csv2("../data/road_network.csv")
+rd_network <- readr::read_csv2("https://storage.yandexcloud.net/roadgraph/road_network.csv")
 glimpse(rd_network)
 
 ```
@@ -24,7 +25,7 @@ glimpse(rd_network)
 
 ```{r}
 
-routers <- readr::read_csv2("../data/wifi_routers.csv")
+routers <- readr::read_csv2("data/wifi_routers.csv")
 
 routers <- routers %>% 
   tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lat", "lon")) %>% 
