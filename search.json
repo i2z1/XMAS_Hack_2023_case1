@@ -1,31 +1,24 @@
 [
   {
-    "objectID": "data_preparation.html",
-    "href": "data_preparation.html",
-    "title": "Подготовка данных",
+    "objectID": "clickhouse.html",
+    "href": "clickhouse.html",
+    "title": "Clickhouse магия",
     "section": "",
-    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
+    "text": "А вот код!\nlibrary(RClickhouse)\n\ncon &lt;- DBI::dbConnect(RClickhouse::clickhouse(), host=\"localhost\",\n                      port = 9000,\n                      dbname = \"WIFI\",\n                      user = \"default\",\n                      password = \"useruser\", compression = \"lz4\")\n\n\nУ нас много строк даже после очистки:\n\n\nА вот код!\nDBI::dbGetQuery(con, \"SELECT count(*)\n                             FROM mainlog\")\n\n\n    count()\n1 277467000\n\n\nПример данных\n\n\nА вот код!\nres &lt;- DBI::dbGetQuery(con, \"SELECT (*)\n                             FROM mainlog limit 10\")\nknitr::kable(res)\n\n\n\n\n\n\n\n\n\n\n\n\n\nguid\ntm\nrouter_mac\nuser_mac\nsignal\nrouter_id\n\n\n\n\nb7e87fd6-49e9-41a7-9645-4ae25f120138\n2023-01-01 03:00:00.000 +0300\n48:8F:5A:AE:A1:D9\n68:D7:9A:A2:74:60\n-73.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\n014f1da1-e200-4fc5-869a-a695836a2fe5\n2023-01-01 03:00:00.000 +0300\n48:8F:5A:AE:A1:D9\n6C:5A:B0:A1:DB:8E\n-68.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\n9d5dfa10-f9fd-4dae-ac86-c935381a02b4\n2023-01-01 03:00:00.000 +0300\nB8:69:F4:6B:FD:E9\n60:A4:B7:4D:89:37\n-75.0\n07190dec-be71-44a2-8d64-c24fb51ebc7b\n\n\n14ed8300-18f3-42e6-9a92-e458edc2fac9\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:07\n80:2A:A8:76:08:1C\n-74.0\n8a823f01-771f-420e-8971-928cba314a24\n\n\n35a91e47-d8a2-4642-8002-a5298702f12e\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:40\n38:17:66:10:29:3C\n-73.0\n3d9490f4-fb08-4c4c-80ec-ca744a6d9ab4\n\n\n63eb92c4-3f13-45bc-b055-421dd6787ce6\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:40\nD0:37:45:C1:E1:1E\n-66.0\n3d9490f4-fb08-4c4c-80ec-ca744a6d9ab4\n\n\n63d60bf2-6cef-4d32-92ef-8dfba4c63a82\n2023-01-01 03:00:01.000 +0300\n48:8F:5A:AC:81:1D\n68:D7:9A:BE:E3:20\n-57.0\n8a734674-e451-4fe1-8b50-3b3b46e334a1\n\n\n1928f1cd-5aef-427e-ac19-5295441827bb\n2023-01-01 03:00:01.000 +0300\n48:8F:5A:AE:A1:D9\n00:1E:43:90:F8:65\n-68.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\nda4c5fcb-3006-48ae-931c-28c911bd9179\n2023-01-01 03:00:01.000 +0300\nB8:69:F4:6B:FD:E9\n8E:41:A1:E8:8C:B6\n-74.0\n07190dec-be71-44a2-8d64-c24fb51ebc7b\n\n\n511284de-fa1b-42e6-b47f-2ee43079d2cc\n2023-01-01 03:00:02.000 +0300\n48:8F:5A:AE:A1:D9\n5A:1A:86:06:3C:F7\n-75.0\n0648078a-9d45-4577-af14-12b49e8f017b"
   },
   {
-    "objectID": "data_preparation.html#подготовка-рабочего-окружения",
-    "href": "data_preparation.html#подготовка-рабочего-окружения",
-    "title": "Подготовка данных",
+    "objectID": "clickhouse.html#подключение",
+    "href": "clickhouse.html#подключение",
+    "title": "Clickhouse магия",
     "section": "",
-    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
-  },
-  {
-    "objectID": "data_preparation.html#импорт",
-    "href": "data_preparation.html#импорт",
-    "title": "Подготовка данных",
-    "section": "Импорт",
-    "text": "Импорт\n\n\nCode\n#|eval: false \n\nrd_network &lt;- readr::read_csv2(\"https://storage.yandexcloud.net/roadgraph/road_network.csv\")\nglimpse(rd_network)\n\n\nRows: 349,753\nColumns: 6\n$ geom           &lt;chr&gt; \"LINESTRING (37.081866 54.504539,37.081866 54.50443,37.…\n$ from_vertex_id &lt;dbl&gt; 3652, 58925, 58925, 248317, 24102, 52561, 96152, 169402…\n$ to_vertex_id   &lt;dbl&gt; 3650, 69671, 69510, 248315, 24100, 52559, 96154, 169400…\n$ weight         &lt;dbl&gt; 1.784126e+16, 4.689159e+16, 6.011167e+16, 1.951298e+16,…\n$ was_one_way    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…\n$ group_id       &lt;dbl&gt; 42993, NA, NA, NA, 41418, NA, NA, NA, NA, NA, NA, NA, N…\n\n\nРоутеры\n\n\nCode\nrouters &lt;- readr::read_csv2(\"data/wifi_routers.csv\")\n\nrouters &lt;- routers %&gt;% \n  tidyr::separate_wider_delim(geom, delim = \" \", names=c(\"point\", \"lat\", \"lon\")) %&gt;% \n  mutate(lat = stringr::str_replace(lat, \"\\\\(\",\"\") %&gt;% as.numeric()) %&gt;% \n  mutate(lon = stringr::str_replace(lon, \"\\\\)\",\"\") %&gt;% as.numeric())\n\nrouters %&gt;% select(guid, lat, lon)\n\n\n# A tibble: 29 × 3\n   guid                                   lat   lon\n   &lt;chr&gt;                                &lt;dbl&gt; &lt;dbl&gt;\n 1 0648078a-9d45-4577-af14-12b49e8f017b  37.6  54.2\n 2 6422a0a5-2c2d-4610-bebc-91722ea37827  37.6  54.2\n 3 b17aefd3-8431-4054-a0b5-b0a26eeb9f14  37.6  54.2\n 4 92c1cc9e-cfa4-4ef0-91f0-c0a158f547e7  37.6  54.2\n 5 f0058c02-034f-429a-b932-8638089d8718  37.6  54.2\n 6 37cea6a6-eaaa-4e12-9b4b-b444163a2cc8  37.6  54.2\n 7 07190dec-be71-44a2-8d64-c24fb51ebc7b  37.6  54.2\n 8 8a823f01-771f-420e-8971-928cba314a24  37.6  54.2\n 9 8a734674-e451-4fe1-8b50-3b3b46e334a1  37.6  54.2\n10 cdcab165-cc3a-460f-ae99-024216190ab1  37.6  54.2\n# ℹ 19 more rows\n\n\n\nРасстояния\n\n\nCode\n#|eval: false\nlibrary(httr2)\n\nhttr2::request(\"https://graphhopper.com/api/1/route\") %&gt;% \n  req_method(\"POST\")"
+    "text": "А вот код!\nlibrary(RClickhouse)\n\ncon &lt;- DBI::dbConnect(RClickhouse::clickhouse(), host=\"localhost\",\n                      port = 9000,\n                      dbname = \"WIFI\",\n                      user = \"default\",\n                      password = \"useruser\", compression = \"lz4\")\n\n\nУ нас много строк даже после очистки:\n\n\nА вот код!\nDBI::dbGetQuery(con, \"SELECT count(*)\n                             FROM mainlog\")\n\n\n    count()\n1 277467000\n\n\nПример данных\n\n\nА вот код!\nres &lt;- DBI::dbGetQuery(con, \"SELECT (*)\n                             FROM mainlog limit 10\")\nknitr::kable(res)\n\n\n\n\n\n\n\n\n\n\n\n\n\nguid\ntm\nrouter_mac\nuser_mac\nsignal\nrouter_id\n\n\n\n\nb7e87fd6-49e9-41a7-9645-4ae25f120138\n2023-01-01 03:00:00.000 +0300\n48:8F:5A:AE:A1:D9\n68:D7:9A:A2:74:60\n-73.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\n014f1da1-e200-4fc5-869a-a695836a2fe5\n2023-01-01 03:00:00.000 +0300\n48:8F:5A:AE:A1:D9\n6C:5A:B0:A1:DB:8E\n-68.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\n9d5dfa10-f9fd-4dae-ac86-c935381a02b4\n2023-01-01 03:00:00.000 +0300\nB8:69:F4:6B:FD:E9\n60:A4:B7:4D:89:37\n-75.0\n07190dec-be71-44a2-8d64-c24fb51ebc7b\n\n\n14ed8300-18f3-42e6-9a92-e458edc2fac9\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:07\n80:2A:A8:76:08:1C\n-74.0\n8a823f01-771f-420e-8971-928cba314a24\n\n\n35a91e47-d8a2-4642-8002-a5298702f12e\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:40\n38:17:66:10:29:3C\n-73.0\n3d9490f4-fb08-4c4c-80ec-ca744a6d9ab4\n\n\n63eb92c4-3f13-45bc-b055-421dd6787ce6\n2023-01-01 03:00:00.000 +0300\nCC:2D:E0:82:B9:40\nD0:37:45:C1:E1:1E\n-66.0\n3d9490f4-fb08-4c4c-80ec-ca744a6d9ab4\n\n\n63d60bf2-6cef-4d32-92ef-8dfba4c63a82\n2023-01-01 03:00:01.000 +0300\n48:8F:5A:AC:81:1D\n68:D7:9A:BE:E3:20\n-57.0\n8a734674-e451-4fe1-8b50-3b3b46e334a1\n\n\n1928f1cd-5aef-427e-ac19-5295441827bb\n2023-01-01 03:00:01.000 +0300\n48:8F:5A:AE:A1:D9\n00:1E:43:90:F8:65\n-68.0\n0648078a-9d45-4577-af14-12b49e8f017b\n\n\nda4c5fcb-3006-48ae-931c-28c911bd9179\n2023-01-01 03:00:01.000 +0300\nB8:69:F4:6B:FD:E9\n8E:41:A1:E8:8C:B6\n-74.0\n07190dec-be71-44a2-8d64-c24fb51ebc7b\n\n\n511284de-fa1b-42e6-b47f-2ee43079d2cc\n2023-01-01 03:00:02.000 +0300\n48:8F:5A:AE:A1:D9\n5A:1A:86:06:3C:F7\n-75.0\n0648078a-9d45-4577-af14-12b49e8f017b"
   },
   {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n\nCode\n1 + 1\n\n\n[1] 2"
+    "text": "About this site\n\n\nА вот код!\n1 + 1\n\n\n[1] 2"
   },
   {
     "objectID": "index.html",
@@ -33,5 +26,26 @@
     "title": "DSFans_XMASHack",
     "section": "",
     "text": "Сайт проекта команды DSFans"
+  },
+  {
+    "objectID": "data_preparation.html",
+    "href": "data_preparation.html",
+    "title": "Подготовка данных",
+    "section": "",
+    "text": "А вот код!\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
+  },
+  {
+    "objectID": "data_preparation.html#подготовка-рабочего-окружения",
+    "href": "data_preparation.html#подготовка-рабочего-окружения",
+    "title": "Подготовка данных",
+    "section": "",
+    "text": "А вот код!\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
+  },
+  {
+    "objectID": "data_preparation.html#импорт",
+    "href": "data_preparation.html#импорт",
+    "title": "Подготовка данных",
+    "section": "Импорт",
+    "text": "Импорт\n\n\nА вот код!\n#|eval: false \n\nrd_network &lt;- readr::read_csv2(\"https://storage.yandexcloud.net/roadgraph/road_network.csv\")\nglimpse(rd_network)\n\n\nRows: 349,753\nColumns: 6\n$ geom           &lt;chr&gt; \"LINESTRING (37.081866 54.504539,37.081866 54.50443,37.…\n$ from_vertex_id &lt;dbl&gt; 3652, 58925, 58925, 248317, 24102, 52561, 96152, 169402…\n$ to_vertex_id   &lt;dbl&gt; 3650, 69671, 69510, 248315, 24100, 52559, 96154, 169400…\n$ weight         &lt;dbl&gt; 1.784126e+16, 4.689159e+16, 6.011167e+16, 1.951298e+16,…\n$ was_one_way    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…\n$ group_id       &lt;dbl&gt; 42993, NA, NA, NA, 41418, NA, NA, NA, NA, NA, NA, NA, N…\n\n\nРоутеры\n\n\nА вот код!\nrouters &lt;- readr::read_csv2(\"data/wifi_routers.csv\")\n\nrouters &lt;- routers %&gt;% \n  tidyr::separate_wider_delim(geom, delim = \" \", names=c(\"point\", \"lat\", \"lon\")) %&gt;% \n  mutate(lat = stringr::str_replace(lat, \"\\\\(\",\"\") %&gt;% as.numeric()) %&gt;% \n  mutate(lon = stringr::str_replace(lon, \"\\\\)\",\"\") %&gt;% as.numeric())\n\nrouters %&gt;% select(guid, lat, lon)\n\n\n# A tibble: 29 × 3\n   guid                                   lat   lon\n   &lt;chr&gt;                                &lt;dbl&gt; &lt;dbl&gt;\n 1 0648078a-9d45-4577-af14-12b49e8f017b  37.6  54.2\n 2 6422a0a5-2c2d-4610-bebc-91722ea37827  37.6  54.2\n 3 b17aefd3-8431-4054-a0b5-b0a26eeb9f14  37.6  54.2\n 4 92c1cc9e-cfa4-4ef0-91f0-c0a158f547e7  37.6  54.2\n 5 f0058c02-034f-429a-b932-8638089d8718  37.6  54.2\n 6 37cea6a6-eaaa-4e12-9b4b-b444163a2cc8  37.6  54.2\n 7 07190dec-be71-44a2-8d64-c24fb51ebc7b  37.6  54.2\n 8 8a823f01-771f-420e-8971-928cba314a24  37.6  54.2\n 9 8a734674-e451-4fe1-8b50-3b3b46e334a1  37.6  54.2\n10 cdcab165-cc3a-460f-ae99-024216190ab1  37.6  54.2\n# ℹ 19 more rows\n\n\n\nРасстояния\n\n\nА вот код!\n#|eval: false\nlibrary(httr2)\n\nhttr2::request(\"https://graphhopper.com/api/1/route\") %&gt;% \n  req_method(\"POST\")"
   }
 ]
