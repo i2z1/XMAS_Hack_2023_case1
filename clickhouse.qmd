@@ -36,17 +36,146 @@ res <- DBI::dbGetQuery(con, "SELECT (*)
 knitr::kable(res)
 ```
 
+### Общий heatmap
+
+```{r}
+library(dplyr)
+
+hmap_tbl <- tbl(con, "mainlog") %>% 
+  group_by(router_id) %>% 
+  summarise(n=n()) %>% 
+  collect()
+
+readr::write_csv2(hmap_tbl, "data/all_routers_popularity_annual.csv")
+```
+
+Строим heatmap
+
+```{r}
+
+```
+
+
 ### Добавим данных из роутеров
 
 ```{r}
 routers_dist <- readr::read_csv("https://storage.yandexcloud.net/roadgraph/marshruts_lengts.csv")
 
+
+rdst2upl <- routers_dist %>% 
+  select(from_guid, to_guid, length)
+
+DBI::dbWriteTable(con, "rdst", rdst2upl)
+
+tbl(con, "rdst") %>% 
+  head %>% 
+  collect()
 # rdst <- routers_dist %>% 
 #   tidyr::separate_wider_delim(from, delim = " ", names = c("lat1", "lon1")) %>% 
 #   tidyr::separate_wider_delim(to, delim = " ", names = c("lat2", "lon2")) %>% 
 #   mutate(lat1 = round(lat1 %>% as.numeric(),digits = 5))
 ```
 
+### Реализация LAG/LEAD в Clickhouse -- пока отсутствует
 
 
-## 
+
+<https://www.programmersought.com/article/532510185734/>
+
+
+
+## Proof-of-Concept решение
+
+### Идея
+
+
+
+```{r}
+df <- readr::read_csv2("https://storage.yandexcloud.net/roadgraph/wifi_logs_2023_01_01_202312081852.csv")
+
+
+```
+```{r}
+df %>% 
+  mutate(tm = as.POSIXct(tm)) %>% 
+  select(tm, router_mac, user_mac) %>% 
+  arrange(user_mac) %>% 
+  head(10) %>% 
+  knitr::kable()
+```
+
+Если посмотреть на отсортированные данные -- то можно наблдать как юзеры отмечаются на разных роутерахв разное время. Можно замерить лаг (разницу между прошлым временем и текущим), а также подсчитать расстояние между БС, на которой была предыдущая отметка.
+
+Очевидно, что
+
+$$V = S/t$$
+
+Выполняем для всех на 01-01-2023
+
+```{r}
+monitoring_df <- df %>% 
+  mutate(tm = as.POSIXct(tm)) %>% 
+  group_by(user_mac, .drop = FALSE) %>% 
+  arrange(tm) %>% 
+  summarise(tm, lagtime = lag(tm), lagpoint = lag(router_id), router_id) %>% 
+  filter(lagpoint!=router_id)
+
+monitoring_df_w_dist <- left_join(monitoring_df, rdst2upl, by = c("lagpoint" = "from_guid", "router_id" = "to_guid")) %>% 
+  mutate(time_delta = (tm - lagtime) %>% as.numeric()) %>% 
+  mutate(velocity = length / time_delta)
+  
+```
+
+Получили скорость в районе роутера
+
+Теперь сгруппируем по роутерам и определеим средняя скорость в разные интервалы времени
+
+### Утро
+
+```{r}
+utro <- "2023-01-01 11:00:00"
+
+library(lubridate)
+
+utro_df <- monitoring_df_w_dist %>% 
+  filter(ymd_hms(tm) < ymd_hms(utro)) %>% 
+  group_by(router_id) %>% 
+  summarise(vel = median(velocity))
+
+write.csv2(utro_df, file = "data/utro_2023_01_01.csv")
+
+```
+
+### День
+
+```{r}
+utro <- "2023-01-01 11:00:00"
+ve4er <- "2023-01-01 17:00:00"
+
+library(lubridate)
+
+den_df <- monitoring_df_w_dist %>% 
+  filter(ymd_hms(tm) > ymd_hms(utro) & ymd_hms(tm) < ymd_hms(ve4er))%>% 
+  group_by(router_id) %>% 
+  summarise(vel = median(velocity))
+
+write.csv2(den_df, file = "data/den_2023_01_01.csv")
+
+```
+
+### Вечер
+
+```{r}
+
+ve4er <- "2023-01-01 17:00:00"
+
+library(lubridate)
+
+ve4er_df <- monitoring_df_w_dist %>% 
+  filter(ymd_hms(tm) > ymd_hms(ve4er))%>% 
+  group_by(router_id) %>% 
+  summarise(vel = median(velocity))
+
+write.csv2(ve4er_df, file = "data/ve4er_2023_01_01.csv")
+
+```
