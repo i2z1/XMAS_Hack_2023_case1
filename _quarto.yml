@@ -1,0 +1,20 @@
+project:
+  type: website
+
+website:
+  title: "DSFans_XMAS"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Главная
+      - data_preparation.qmd
+      - about.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+

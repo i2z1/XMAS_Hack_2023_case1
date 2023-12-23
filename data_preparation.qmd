@@ -1,15 +1,12 @@
 ---
-title: "Pipeline"
-author: "DSFans"
-format: html
+title: "Подготовка данных"
 ---
 
-## Подготовка
+## Подготовка рабочего окружения
 
 ```{r}
 library(tidyverse)
 ```
-
 
 ## Импорт
 
@@ -19,6 +16,8 @@ rd_network <- readr::read_csv2("../data/road_network.csv")
 glimpse(rd_network)
 
 ```
+
+Роутеры
 
 ```{r}
 
@@ -31,4 +30,12 @@ routers <- routers %>%
 
 ```
 
+### Расстояния
 
+```{r}
+library(httr2)
+
+httr2::request("https://graphhopper.com/api/1/route") %>% 
+  req_method("POST")
+  
+```
