@@ -6,6 +6,85 @@ title: "Перемещение -- среднее время"
 
 ### Утро
 
+```{r}
+library(tidyverse)
+library(dplyr)
+library(leaflet)
+
+routers <- readr::read_csv2("data/wifi_routers.csv")
+
+routers <- routers %>% 
+  tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lon", "lat")) %>% 
+  mutate(lon = stringr::str_replace(lon, "\\(","") %>% as.numeric()) %>% 
+  mutate(lat = stringr::str_replace(lat, "\\)","") %>% as.numeric())
+
+unique_statistics_utro <- readr::read_csv2("data/utro_2023_01_01.csv")
+unique_statistics_utro <- data.frame(unique_statistics_utro)
+
+utro_stats <- merge(x = unique_statistics_utro, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
+utro_stats <- utro_stats %>% arrange(desc(vel))
+
+utro_stats$vel <- cut(utro_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+
+beatCol <- colorFactor(palette = 'RdYlGn', utro_stats$vel)
+
+mapa_utro <- leaflet() %>%
+  addTiles() %>% 
+  addProviderTiles(providers$OpenStreetMap, group = 'Open SM')  %>%
+  setView(lng = 37.56, lat = 54.2, zoom = 12) %>%
+  addCircleMarkers(data = utro_stats, lat = utro_stats$lat, lng = utro_stats$lon, color = ~beatCol(utro_stats$vel), radius=14, stroke = FALSE, fillOpacity = 0.8, popup = utro_stats$router_id) %>% addLegend('bottomright', pal = beatCol, values = utro_stats$vel,
+            title = 'Распределение скоростей утром',
+            opacity = 1)
+mapa_utro
+
+```
+
 ### День
 
+```{r}
+
+unique_statistics_den <- readr::read_csv2("data/den_2023_01_01.csv")
+unique_statistics_den <- data.frame(unique_statistics_den)
+
+den_stats <- merge(x = unique_statistics_den, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
+den_stats <- den_stats %>% arrange(desc(vel))
+
+den_stats$vel <- cut(den_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+
+beatCol <- colorFactor(palette = 'RdYlGn', den_stats$vel)
+
+mapa_den <- leaflet() %>%
+  addTiles() %>% 
+  addProviderTiles(providers$OpenStreetMap, group = 'Open SM')  %>%
+  setView(lng = 37.56, lat = 54.2, zoom = 12) %>%
+  addCircleMarkers(data = den_stats, lat = den_stats$lat, lng = den_stats$lon, color = ~beatCol(den_stats$vel), radius=14, stroke = FALSE, fillOpacity = 0.8, popup = den_stats$router_id) %>% addLegend('bottomright', pal = beatCol, values = den_stats$vel,
+            title = 'Распределение скоростей днем',
+            opacity = 1)
+mapa_den
+
+```
+
 ### Вечер 
+
+```{r}
+
+unique_statistics_vecer <- readr::read_csv2("data/ve4er_2023_01_01.csv")
+unique_statistics_vecer <- data.frame(unique_statistics_vecer)
+
+vecer_stats <- merge(x = unique_statistics_vecer, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
+vecer_stats <- vecer_stats %>% arrange(desc(vel))
+
+vecer_stats$vel <- cut(vecer_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+
+beatCol <- colorFactor(palette = 'RdYlGn', vecer_stats$vel)
+
+mapa_vecer <- leaflet() %>%
+  addTiles() %>% 
+  addProviderTiles(providers$OpenStreetMap, group = 'Open SM')  %>%
+  setView(lng = 37.56, lat = 54.2, zoom = 12) %>%
+  addCircleMarkers(data = vecer_stats, lat = vecer_stats$lat, lng = vecer_stats$lon, color = ~beatCol(vecer_stats$vel), radius=14, stroke = FALSE, fillOpacity = 0.8, popup = vecer_stats$router_id) %>% addLegend('bottomright', pal = beatCol, values = vecer_stats$vel,
+            title = 'Распределение скоростей вечером',
+            opacity = 1)
+mapa_vecer
+
+```
