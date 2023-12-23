@@ -5,3 +5,9 @@ title: "DSFans_XMASHack"
 Сайт проекта команды DSFans
 
 ![](img/xmashack_logo.jpg){width=50%}
+
+ + <https://github.com/i2z1>
+ + <https://github.com/TheRunuwayDinosaur>
+ + <https://github.com/limeparrot>
+ + <https://github.com/moltensock>
+ + <https://github.com/Sanches23rx>

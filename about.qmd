@@ -2,8 +2,8 @@
 title: "About"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+ + <https://github.com/i2z1>
+ + <https://github.com/TheRunuwayDinosaur>
+ + <https://github.com/limeparrot>
+ + <https://github.com/moltensock>
+ + <https://github.com/Sanches23rx>
