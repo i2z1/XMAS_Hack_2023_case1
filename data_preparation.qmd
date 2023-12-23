@@ -31,6 +31,8 @@ routers <- routers %>%
   mutate(lat = stringr::str_replace(lat, "\\(","") %>% as.numeric()) %>% 
   mutate(lon = stringr::str_replace(lon, "\\)","") %>% as.numeric())
 
+routers %>% select(guid, lat, lon)
+
 ```
 
 ### Расстояния
