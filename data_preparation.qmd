@@ -1,5 +1,8 @@
 ---
 title: "Подготовка данных"
+execute: 
+  warning: false
+  error: false
 ---
 
 ## Подготовка рабочего окружения
