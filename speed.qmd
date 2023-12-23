@@ -24,7 +24,7 @@ unique_statistics_utro <- data.frame(unique_statistics_utro)
 utro_stats <- merge(x = unique_statistics_utro, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
 utro_stats <- utro_stats %>% arrange(desc(vel))
 
-utro_stats$vel <- cut(utro_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+utro_stats$vel <- cut(utro_stats$vel*3.6, c(0, 15, 25, 30, 1000), include.lowest = T, labels = c('<15 км/ч', '15-25 км/ч', '25-30 км/ч', '>30 км/ч'))
 
 beatCol <- colorFactor(palette = 'RdYlGn', utro_stats$vel)
 
@@ -49,7 +49,7 @@ unique_statistics_den <- data.frame(unique_statistics_den)
 den_stats <- merge(x = unique_statistics_den, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
 den_stats <- den_stats %>% arrange(desc(vel))
 
-den_stats$vel <- cut(den_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+den_stats$vel <- cut(den_stats$vel*3.6, c(0, 15, 25, 30, 1000), include.lowest = T, labels = c('<15 км/ч', '15-25 км/ч', '25-30 км/ч', '>30 км/ч'))
 
 beatCol <- colorFactor(palette = 'RdYlGn', den_stats$vel)
 
@@ -74,7 +74,7 @@ unique_statistics_vecer <- data.frame(unique_statistics_vecer)
 vecer_stats <- merge(x = unique_statistics_vecer, y = routers, by.x = "router_id", by.y = "guid", all.x = TRUE)
 vecer_stats <- vecer_stats %>% arrange(desc(vel))
 
-vecer_stats$vel <- cut(vecer_stats$vel*3.6, c(0, 40, 60, 80, 1000), include.lowest = T, labels = c('<40 км/ч', '40-60 км/ч', '60-80 км/ч', '>80 км/ч'))
+vecer_stats$vel <- cut(vecer_stats$vel*3.6, c(0, 15, 25, 30, 1000), include.lowest = T, labels = c('<15 км/ч', '15-25 км/ч', '25-30 км/ч', '>30 км/ч'))
 
 beatCol <- colorFactor(palette = 'RdYlGn', vecer_stats$vel)
 
