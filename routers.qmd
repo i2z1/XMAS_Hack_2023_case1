@@ -3,3 +3,44 @@ title: "Роутеры"
 ---
 
 Размещение роутеров
+
+## Вычисление расстояний между роутерами
+
+```
+import osmnx as ox
+import networkx as nx
+
+start_latlng = (37.618886, 54.204617)
+end_latlng = (37.619182, 54.205679)
+
+mode = 'drive' # 'drive', 'bike', 'walk'
+
+optimizer = 'time' # 'length','time'
+
+center = (54.203918,37.618391) # меняем местами
+graph = ox.graph_from_point(center,3000,dist_type='network',simplify=True)
+
+orig_node = ox.distance.nearest_nodes(graph,start_latlng[0],start_latlng[1])
+
+dest_node = ox.distance.nearest_nodes(graph, end_latlng[0],end_latlng[1])
+
+shortest_route = nx.shortest_path(graph, orig_node,dest_node,
+                                  weight=optimizer)
+
+print(shortest_route)
+print("dist - ",nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length'))
+shortest_route_map = ox.plot_route_folium(graph, shortest_route)
+
+
+shortest_route_map.save('route.html')
+
+```
+
+## Результат
+
+::: {.callout-important}
+## Датасет
+
+https://storage.yandexcloud.net/roadgraph/marshruts_lengts.csv
+
+:::
