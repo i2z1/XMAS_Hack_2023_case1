@@ -121,7 +121,8 @@ monitoring_df <- df %>%
 
 monitoring_df_w_dist <- left_join(monitoring_df, rdst2upl, by = c("lagpoint" = "from_guid", "router_id" = "to_guid")) %>% 
   mutate(time_delta = (tm - lagtime) %>% as.numeric()) %>% 
-  mutate(velocity = length / time_delta)
+  mutate(velocity = length / time_delta) %>% 
+  filter(velocity<25)
   
 ```
 
