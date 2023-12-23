@@ -20,7 +20,7 @@ unique_statistics <- readr::read_csv2("data/all_routers_popularity_annual.csv")
 unique_statistics <- data.frame(unique_statistics)
 
 all_stats <- merge(x = unique_statistics, y = routers, by.x = "router_id", by.y = "guid", all.y = TRUE)
-all_stats <- all_stats %>% arrange(desc(stats))
+all_stats <- all_stats %>% arrange(desc(n))
 
 all_stats$stats <- cut(all_stats$stats, c(0, 1000000, 5000000, 20000000, 2000000000), include.lowest = T, labels = c('<1m users', '1m-5m users', '5m-20m users', '>20m users'))
 
