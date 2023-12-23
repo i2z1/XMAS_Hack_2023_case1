@@ -43,8 +43,6 @@ routers <- readr::read_csv2("data/wifi_routers.csv")
 <img src="./img/sunset.jpeg" height="500" width="835"></img>
 Определены зоны с низким потоком трафика
 <img src="./img/stats_problem_zones.jpeg" height="500" width="835"></img>
-Построена временная шкала по неделям нагруженности транспортных узлов
-<img src="./img/nofile.jpeg" height="500" width="835"></img><br>
    
 ## Составление матрицы перемещений     
 +  Матрица передвижений по городу
