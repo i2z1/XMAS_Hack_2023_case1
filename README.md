@@ -2,6 +2,8 @@
 
 ![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white) ![ClickHouse](https://img.shields.io/badge/ClickHouse-FFFAFA?style=for-the-badge&logo=ClickHouse&logoColor=yellow) ![YandexCloud](https://img.shields.io/badge/YandexCloud-FF0000?style=for-the-badge&logo=Yandex&logoColor=FF0000) ![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
+[https://i2z1.github.io/XMAS_Hack_2023_case1/](https://i2z1.github.io/XMAS_Hack_2023_case1/)
+
 ## Стек технологий:
 +  Debian
 +  ClickHouse
