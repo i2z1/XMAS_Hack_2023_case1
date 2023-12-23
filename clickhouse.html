@@ -529,7 +529,8 @@ window.Quarto = {
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>monitoring_df_w_dist <span class="ot">&lt;-</span> <span class="fu">left_join</span>(monitoring_df, rdst2upl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"lagpoint"</span> <span class="ot">=</span> <span class="st">"from_guid"</span>, <span class="st">"router_id"</span> <span class="ot">=</span> <span class="st">"to_guid"</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_delta =</span> (tm <span class="sc">-</span> lagtime) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocity =</span> length <span class="sc">/</span> time_delta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocity =</span> length <span class="sc">/</span> time_delta) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(velocity<span class="sc">&lt;</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Получили скорость в районе роутера</p>
@@ -1152,62 +1153,63 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>monitoring_df_w_dist <span class="ot">&lt;-</span> <span class="fu">left_join</span>(monitoring_df, rdst2upl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"lagpoint"</span> <span class="ot">=</span> <span class="st">"from_guid"</span>, <span class="st">"router_id"</span> <span class="ot">=</span> <span class="st">"to_guid"</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_delta =</span> (tm <span class="sc">-</span> lagtime) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocity =</span> length <span class="sc">/</span> time_delta)</span>
-<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>Получили скорость в районе роутера</span>
-<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>Теперь сгруппируем по роутерам и определеим средняя скорость в разные интервалы времени</span>
-<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a><span class="fu">### Утро</span></span>
-<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a>utro <span class="ot">&lt;-</span> <span class="st">"2023-01-01 11:00:00"</span></span>
-<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a>utro_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
-<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&lt;</span> <span class="fu">ymd_hms</span>(utro)) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
-<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(utro_df, <span class="at">file =</span> <span class="st">"data/utro_2023_01_01.csv"</span>)</span>
-<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### День</span></span>
-<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>utro <span class="ot">&lt;-</span> <span class="st">"2023-01-01 11:00:00"</span></span>
-<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>ve4er <span class="ot">&lt;-</span> <span class="st">"2023-01-01 17:00:00"</span></span>
-<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>den_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
-<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&gt;</span> <span class="fu">ymd_hms</span>(utro) <span class="sc">&amp;</span> <span class="fu">ymd_hms</span>(tm) <span class="sc">&lt;</span> <span class="fu">ymd_hms</span>(ve4er))<span class="sc">%&gt;%</span> </span>
-<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
-<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(den_df, <span class="at">file =</span> <span class="st">"data/den_2023_01_01.csv"</span>)</span>
-<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a><span class="fu">### Вечер</span></span>
-<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a>ve4er <span class="ot">&lt;-</span> <span class="st">"2023-01-01 17:00:00"</span></span>
-<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a>ve4er_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
-<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&gt;</span> <span class="fu">ymd_hms</span>(ve4er))<span class="sc">%&gt;%</span> </span>
-<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
-<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(ve4er_df, <span class="at">file =</span> <span class="st">"data/ve4er_2023_01_01.csv"</span>)</span>
-<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocity =</span> length <span class="sc">/</span> time_delta) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(velocity<span class="sc">&lt;</span><span class="dv">25</span>)</span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>Получили скорость в районе роутера</span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>Теперь сгруппируем по роутерам и определеим средняя скорость в разные интервалы времени</span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="fu">### Утро</span></span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a>utro <span class="ot">&lt;-</span> <span class="st">"2023-01-01 11:00:00"</span></span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>utro_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&lt;</span> <span class="fu">ymd_hms</span>(utro)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(utro_df, <span class="at">file =</span> <span class="st">"data/utro_2023_01_01.csv"</span>)</span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a><span class="fu">### День</span></span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>utro <span class="ot">&lt;-</span> <span class="st">"2023-01-01 11:00:00"</span></span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a>ve4er <span class="ot">&lt;-</span> <span class="st">"2023-01-01 17:00:00"</span></span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>den_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&gt;</span> <span class="fu">ymd_hms</span>(utro) <span class="sc">&amp;</span> <span class="fu">ymd_hms</span>(tm) <span class="sc">&lt;</span> <span class="fu">ymd_hms</span>(ve4er))<span class="sc">%&gt;%</span> </span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(den_df, <span class="at">file =</span> <span class="st">"data/den_2023_01_01.csv"</span>)</span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Вечер</span></span>
+<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a>ve4er <span class="ot">&lt;-</span> <span class="st">"2023-01-01 17:00:00"</span></span>
+<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a>ve4er_df <span class="ot">&lt;-</span> monitoring_df_w_dist <span class="sc">%&gt;%</span> </span>
+<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">ymd_hms</span>(tm) <span class="sc">&gt;</span> <span class="fu">ymd_hms</span>(ve4er))<span class="sc">%&gt;%</span> </span>
+<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(router_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">vel =</span> <span class="fu">median</span>(velocity))</span>
+<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(ve4er_df, <span class="at">file =</span> <span class="st">"data/ve4er_2023_01_01.csv"</span>)</span>
+<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
