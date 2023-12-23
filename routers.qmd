@@ -9,30 +9,65 @@ title: "Роутеры"
 ```
 import osmnx as ox
 import networkx as nx
+import csv
 
-start_latlng = (37.618886, 54.204617)
-end_latlng = (37.619182, 54.205679)
+points = [(37.618886,54.204617),
+          (37.5826629190378,54.1688958982062),
+          (37.5931054621157,54.1854456631672),
+          (37.5726628595483,54.1691301221863),
+          (37.6230252453024,54.2347433816421),
+          (37.616479,54.191903),
+          (37.622509,54.2128),
+          (37.611688,54.195984),
+          (37.625018,54.218076),
+          (37.622566,54.189654),
+          (37.604794,54.18133),
+          (37.614096,54.193204),
+          (37.6286864157148,54.2276569624141),
+          (37.6245072514748,54.2333462654037),
+          (37.67935,54.219052),
+          (37.6182365086987,54.2413214831852),
+          (37.627888,54.191341),
+          (37.6119371506259,54.2491761841739),
+          (37.625265,54.190082),
+          (37.620844,54.2101),
+          (37.5855121948686,54.1714546891764),
+          (37.5799264475165,54.1666267574838),
+          (37.5754334510529,54.1718766491252),
+          (37.619014,54.191034),
+          (37.5946593824111,54.1646166190679),
+          (37.5974766750285,54.1839287967087),
+          (37.619966,54.208412),
+          (37.614644,54.200674),
+          (37.619182,54.205679)
+          ]
 
-mode = 'drive' # 'drive', 'bike', 'walk'
-
-optimizer = 'time' # 'length','time'
-
-center = (54.203918,37.618391) # меняем местами
-graph = ox.graph_from_point(center,3000,dist_type='network',simplify=True)
-
-orig_node = ox.distance.nearest_nodes(graph,start_latlng[0],start_latlng[1])
-
-dest_node = ox.distance.nearest_nodes(graph, end_latlng[0],end_latlng[1])
-
-shortest_route = nx.shortest_path(graph, orig_node,dest_node,
-                                  weight=optimizer)
-
-print(shortest_route)
-print("dist - ",nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length'))
-shortest_route_map = ox.plot_route_folium(graph, shortest_route)
+with open("marshruts_lengts.csv","w") as file:
+    writer = csv.writer(file)
+    writer.writerow(("from","to","length"))
 
 
-shortest_route_map.save('route.html')
+mode = 'drive'
+optimizer = 'length'
+center = (54.203918, 37.618391)  # меняем местами
+graph = ox.graph_from_point(center, 20000, dist_type='network', simplify=True)
+
+for i in range(0,len(points)):
+    for j in range(0,len(points)):
+        if i == j:
+            continue
+
+        orig_node = ox.distance.nearest_nodes(graph,points[i][0],points[i][1])
+
+        dest_node = ox.distance.nearest_nodes(graph, points[j][0],points[j][1])
+
+        shortest_route = nx.shortest_path(graph, orig_node,dest_node,
+                                          weight=optimizer)
+        length = nx.shortest_path_length(G=graph, source=orig_node, target=dest_node, weight='length')
+        newRow = [str(points[i][0]) + ' ' + str(points[i][1]),str(points[j][0]) + ' ' + str(points[j][1]),length]
+        with open("marshruts_lengts.csv","a") as file:
+            writer = csv.writer(file)
+            writer.writerow(newRow)
 
 ```
 
