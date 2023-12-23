@@ -1,7 +1,10 @@
 ---
 title: "Clickhouse магия"
-
+execute: 
+  warning: false
+  error: false
 ---
+
 
 ## Подключение
 
