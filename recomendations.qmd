@@ -22,7 +22,7 @@ unique_statistics <- data.frame(unique_statistics)
 all_stats <- merge(x = unique_statistics, y = routers, by.x = "router_id", by.y = "guid", all.y = TRUE)
 all_stats <- all_stats %>% arrange(desc(n))
 
-all_stats$stats <- cut(all_stats$stats, c(0, 1000000, 5000000, 20000000, 2000000000), include.lowest = T, labels = c('<1m users', '1m-5m users', '5m-20m users', '>20m users'))
+all_stats$stats <- cut(all_stats$n, c(0, 1000000, 5000000, 20000000, 2000000000), include.lowest = T, labels = c('<1m users', '1m-5m users', '5m-20m users', '>20m users'))
 
 beatCol <- colorFactor(palette = 'RdYlGn', all_stats$stats)
 
@@ -40,20 +40,20 @@ mapa
 ## Распределение наиболее используемых роутеров
 
 ```{r}
-routers <- readr::read_csv2("wifi_routers.csv")
+routers <- readr::read_csv2("data/wifi_routers.csv")
 
 routers <- routers %>% 
   tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lon", "lat")) %>% 
   mutate(lon = stringr::str_replace(lon, "\\(","") %>% as.numeric()) %>% 
   mutate(lat = stringr::str_replace(lat, "\\)","") %>% as.numeric())
 
-unique_statistics <- readr::read_csv2("all_routers_popularity_annual.csv")
+unique_statistics <- readr::read_csv2("data/all_routers_popularity_annual.csv")
 unique_statistics <- data.frame(unique_statistics)
 
 all_stats <- merge(x = unique_statistics, y = routers, by.x = "router_id", by.y = "guid", all.y = TRUE)
 all_stats <- all_stats %>% arrange(desc(n))
 
-all_stats$stats <- cut(1/all_stats$stats, c(1/1000000000, 1/1000000, 1/5000000, 1/20000000, 1/500), include.lowest = T, labels = c('>20m users', '5m-20m users', '1m-5m users', '<1m users'))
+all_stats$stats <- cut(1/all_stats$n, c(1/1000000000, 1/1000000, 1/5000000, 1/20000000, 1/500), include.lowest = T, labels = c('>20m users', '5m-20m users', '1m-5m users', '<1m users'))
 
 beatCol <- colorFactor(palette = 'RdYlGn', all_stats$stats)
 

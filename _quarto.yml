@@ -10,6 +10,7 @@ website:
       - data_preparation.qmd
       - routers.qmd
       - clickhouse.qmd
+      - recomendations.qmd
       - about.qmd
 
 format:
