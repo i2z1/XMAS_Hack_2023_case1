@@ -1,10 +1,31 @@
 [
   {
+    "objectID": "data_preparation.html",
+    "href": "data_preparation.html",
+    "title": "Подготовка данных",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
+  },
+  {
+    "objectID": "data_preparation.html#подготовка-рабочего-окружения",
+    "href": "data_preparation.html#подготовка-рабочего-окружения",
+    "title": "Подготовка данных",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(httr2)"
+  },
+  {
+    "objectID": "data_preparation.html#импорт",
+    "href": "data_preparation.html#импорт",
+    "title": "Подготовка данных",
+    "section": "Импорт",
+    "text": "Импорт\n\n\nCode\n#|eval: false \n\nrd_network &lt;- readr::read_csv2(\"https://storage.yandexcloud.net/roadgraph/road_network.csv\")\nglimpse(rd_network)\n\n\nRows: 349,753\nColumns: 6\n$ geom           &lt;chr&gt; \"LINESTRING (37.081866 54.504539,37.081866 54.50443,37.…\n$ from_vertex_id &lt;dbl&gt; 3652, 58925, 58925, 248317, 24102, 52561, 96152, 169402…\n$ to_vertex_id   &lt;dbl&gt; 3650, 69671, 69510, 248315, 24100, 52559, 96154, 169400…\n$ weight         &lt;dbl&gt; 1.784126e+16, 4.689159e+16, 6.011167e+16, 1.951298e+16,…\n$ was_one_way    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…\n$ group_id       &lt;dbl&gt; 42993, NA, NA, NA, 41418, NA, NA, NA, NA, NA, NA, NA, N…\n\n\nРоутеры\n\n\nCode\nrouters &lt;- readr::read_csv2(\"data/wifi_routers.csv\")\n\nrouters &lt;- routers %&gt;% \n  tidyr::separate_wider_delim(geom, delim = \" \", names=c(\"point\", \"lat\", \"lon\")) %&gt;% \n  mutate(lat = stringr::str_replace(lat, \"\\\\(\",\"\") %&gt;% as.numeric()) %&gt;% \n  mutate(lon = stringr::str_replace(lon, \"\\\\)\",\"\") %&gt;% as.numeric())\n\nrouters %&gt;% select(guid, lat, lon)\n\n\n# A tibble: 29 × 3\n   guid                                   lat   lon\n   &lt;chr&gt;                                &lt;dbl&gt; &lt;dbl&gt;\n 1 0648078a-9d45-4577-af14-12b49e8f017b  37.6  54.2\n 2 6422a0a5-2c2d-4610-bebc-91722ea37827  37.6  54.2\n 3 b17aefd3-8431-4054-a0b5-b0a26eeb9f14  37.6  54.2\n 4 92c1cc9e-cfa4-4ef0-91f0-c0a158f547e7  37.6  54.2\n 5 f0058c02-034f-429a-b932-8638089d8718  37.6  54.2\n 6 37cea6a6-eaaa-4e12-9b4b-b444163a2cc8  37.6  54.2\n 7 07190dec-be71-44a2-8d64-c24fb51ebc7b  37.6  54.2\n 8 8a823f01-771f-420e-8971-928cba314a24  37.6  54.2\n 9 8a734674-e451-4fe1-8b50-3b3b46e334a1  37.6  54.2\n10 cdcab165-cc3a-460f-ae99-024216190ab1  37.6  54.2\n# ℹ 19 more rows\n\n\n\nРасстояния\n\n\nCode\n#|eval: false\nlibrary(httr2)\n\nhttr2::request(\"https://graphhopper.com/api/1/route\") %&gt;% \n  req_method(\"POST\")"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n\nА вот код!\n1 + 1\n\n\n[1] 2"
+    "text": "About this site\n\n\nCode\n1 + 1\n\n\n[1] 2"
   },
   {
     "objectID": "index.html",
@@ -12,26 +33,5 @@
     "title": "DSFans_XMASHack",
     "section": "",
     "text": "Сайт проекта команды DSFans"
-  },
-  {
-    "objectID": "data_preparation.html",
-    "href": "data_preparation.html",
-    "title": "Подготовка данных",
-    "section": "",
-    "text": "А вот код!\nlibrary(tidyverse)"
-  },
-  {
-    "objectID": "data_preparation.html#подготовка-рабочего-окружения",
-    "href": "data_preparation.html#подготовка-рабочего-окружения",
-    "title": "Подготовка данных",
-    "section": "",
-    "text": "А вот код!\nlibrary(tidyverse)"
-  },
-  {
-    "objectID": "data_preparation.html#импорт",
-    "href": "data_preparation.html#импорт",
-    "title": "Подготовка данных",
-    "section": "Импорт",
-    "text": "Импорт\n\n\nА вот код!\nrd_network &lt;- readr::read_csv2(\"../data/road_network.csv\")\nglimpse(rd_network)\n\n\nRows: 349,753\nColumns: 6\n$ geom           &lt;chr&gt; \"LINESTRING (37.081866 54.504539,37.081866 54.50443,37.…\n$ from_vertex_id &lt;dbl&gt; 3652, 58925, 58925, 248317, 24102, 52561, 96152, 169402…\n$ to_vertex_id   &lt;dbl&gt; 3650, 69671, 69510, 248315, 24100, 52559, 96154, 169400…\n$ weight         &lt;dbl&gt; 1.784126e+16, 4.689159e+16, 6.011167e+16, 1.951298e+16,…\n$ was_one_way    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…\n$ group_id       &lt;dbl&gt; 42993, NA, NA, NA, 41418, NA, NA, NA, NA, NA, NA, NA, N…\n\n\nРоутеры\n\n\nА вот код!\nrouters &lt;- readr::read_csv2(\"../data/wifi_routers.csv\")\n\nrouters &lt;- routers %&gt;% \n  tidyr::separate_wider_delim(geom, delim = \" \", names=c(\"point\", \"lat\", \"lon\")) %&gt;% \n  mutate(lat = stringr::str_replace(lat, \"\\\\(\",\"\") %&gt;% as.numeric()) %&gt;% \n  mutate(lon = stringr::str_replace(lon, \"\\\\)\",\"\") %&gt;% as.numeric())\n\nrouters %&gt;% select(guid, lat, lon)\n\n\n# A tibble: 29 × 3\n   guid                                   lat   lon\n   &lt;chr&gt;                                &lt;dbl&gt; &lt;dbl&gt;\n 1 0648078a-9d45-4577-af14-12b49e8f017b  37.6  54.2\n 2 6422a0a5-2c2d-4610-bebc-91722ea37827  37.6  54.2\n 3 b17aefd3-8431-4054-a0b5-b0a26eeb9f14  37.6  54.2\n 4 92c1cc9e-cfa4-4ef0-91f0-c0a158f547e7  37.6  54.2\n 5 f0058c02-034f-429a-b932-8638089d8718  37.6  54.2\n 6 37cea6a6-eaaa-4e12-9b4b-b444163a2cc8  37.6  54.2\n 7 07190dec-be71-44a2-8d64-c24fb51ebc7b  37.6  54.2\n 8 8a823f01-771f-420e-8971-928cba314a24  37.6  54.2\n 9 8a734674-e451-4fe1-8b50-3b3b46e334a1  37.6  54.2\n10 cdcab165-cc3a-460f-ae99-024216190ab1  37.6  54.2\n# ℹ 19 more rows\n\n\n\nРасстояния\n\n\nА вот код!\nlibrary(httr2)\n\nhttr2::request(\"https://graphhopper.com/api/1/route\") %&gt;% \n  req_method(\"POST\")"
   }
 ]
