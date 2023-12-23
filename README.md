@@ -46,7 +46,7 @@ routers <- readr::read_csv2("data/wifi_routers.csv")
    
 ## Составление матрицы перемещений     
 +  Матрица передвижений по городу
-<p><img src="./img/realmap02.PNG" height="500" width="460"></img><img src="./img/ctymap.PNG" height="500" width="460"></img></p><br>
+<p><img src="./img/realmap02.PNG" height="500" width="460"></img><img src="./img/cty_map.PNG" height="500" width="460"></img></p><br>
 
 ## Визуализация данных
 + Построена тепловая карта наиболее используемых роутеров        
