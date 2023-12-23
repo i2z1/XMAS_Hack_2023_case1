@@ -9,6 +9,8 @@ execute:
 
 ```{r}
 library(tidyverse)
+library(knitr)
+library(httr2)
 ```
 
 ## Импорт
