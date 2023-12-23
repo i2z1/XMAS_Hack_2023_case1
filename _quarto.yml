@@ -8,6 +8,7 @@ website:
       - href: index.qmd
         text: Главная
       - data_preparation.qmd
+      - routers.qmd
       - clickhouse.qmd
       - about.qmd
 
