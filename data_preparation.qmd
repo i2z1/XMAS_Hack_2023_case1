@@ -39,6 +39,7 @@ routers %>% select(guid, lat, lon)
 ### Расстояния
 
 ```{r}
+#|eval: false
 library(httr2)
 
 httr2::request("https://graphhopper.com/api/1/route") %>% 
