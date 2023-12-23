@@ -25,7 +25,7 @@ routers <- readr::read_csv2("data/wifi_routers.csv")
 
 ## Размещение данных в СУБД на виртуальном сервере
 + На базе YandexCloud был создан виртаульный сервер Debian
-+ Импорт данных с ЯндексДиска при помощи консольной программы `wget 'https://disk.yandex.ru/d/logsfilename' -O filename.tar.gz`
++ Импорт данных с ЯндексДиска при помощи `wget`
 + Установка ClickHouse на виртуальный сервер
 + Загрузка данных в ClickHouse `cat $(ls | grep wifi_logs_.*.csv) | tr ';' ',' | tr -d '"' | clickhouse-client`
 <br>
