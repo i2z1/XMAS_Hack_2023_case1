@@ -8,7 +8,6 @@ title: "Рекомендации"
 library(tidyverse)
 library(dplyr)
 library(leaflet)
-library(ggmap)
 
 routers <- readr::read_csv2("data/wifi_routers.csv")
 
