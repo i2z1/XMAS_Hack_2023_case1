@@ -10,14 +10,14 @@ library(dplyr)
 library(leaflet)
 library(ggmap)
 
-routers <- readr::read_csv2("wifi_routers.csv")
+routers <- readr::read_csv2("data/wifi_routers.csv")
 
 routers <- routers %>% 
   tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lon", "lat")) %>% 
   mutate(lon = stringr::str_replace(lon, "\\(","") %>% as.numeric()) %>% 
   mutate(lat = stringr::str_replace(lat, "\\)","") %>% as.numeric())
 
-unique_statistics <- readr::read_csv2("all_routers_popularity_annual.csv")
+unique_statistics <- readr::read_csv2("data/all_routers_popularity_annual.csv")
 unique_statistics <- data.frame(unique_statistics)
 
 all_stats <- merge(x = unique_statistics, y = routers, by.x = "router_id", by.y = "guid", all.y = TRUE)
