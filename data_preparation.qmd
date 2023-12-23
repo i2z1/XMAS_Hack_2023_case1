@@ -1,0 +1,50 @@
+---
+title: "Подготовка данных"
+execute: 
+  warning: false
+  error: false
+---
+
+## Подготовка рабочего окружения
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(httr2)
+```
+
+## Импорт
+
+```{r}
+#|eval: false 
+
+rd_network <- readr::read_csv2("https://storage.yandexcloud.net/roadgraph/road_network.csv")
+glimpse(rd_network)
+
+```
+
+Роутеры
+
+```{r}
+
+routers <- readr::read_csv2("data/wifi_routers.csv")
+
+routers <- routers %>% 
+  tidyr::separate_wider_delim(geom, delim = " ", names=c("point", "lat", "lon")) %>% 
+  mutate(lat = stringr::str_replace(lat, "\\(","") %>% as.numeric()) %>% 
+  mutate(lon = stringr::str_replace(lon, "\\)","") %>% as.numeric())
+
+routers %>% select(guid, lat, lon)
+
+```
+
+### Расстояния
+
+```{r}
+#|eval: false
+library(httr2)
+
+httr2::request("https://graphhopper.com/api/1/route") %>% 
+  req_method("POST")
+  
+```

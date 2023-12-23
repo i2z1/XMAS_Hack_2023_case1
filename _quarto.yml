@@ -1,0 +1,32 @@
+project:
+  type: website
+
+website:
+  title: "DSFans_XMAS"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Главная
+      - data_preparation.qmd
+      - routers.qmd
+      - clickhouse.qmd
+      - about.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    code-fold: true
+    code-summary: "А вот код!"
+    code-tools: true
+
+execute: 
+  freeze: auto
+  warning: false
+  error: false
+
+    
+
+
+

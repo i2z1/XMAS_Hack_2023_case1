@@ -1,0 +1,52 @@
+---
+title: "Clickhouse магия"
+execute: 
+  warning: false
+  error: false
+---
+
+
+## Подключение
+
+```{r}
+#| eval: true
+library(RClickhouse)
+
+con <- DBI::dbConnect(RClickhouse::clickhouse(), host="localhost",
+                      port = 9000,
+                      dbname = "WIFI",
+                      user = "default",
+                      password = "useruser", compression = "lz4")
+```
+
+## Данные
+
+У нас много строк даже после очистки:
+
+```{r}
+DBI::dbGetQuery(con, "SELECT count(*)
+                             FROM mainlog")
+```
+
+Пример данных
+
+```{r}
+res <- DBI::dbGetQuery(con, "SELECT (*)
+                             FROM mainlog limit 10")
+knitr::kable(res)
+```
+
+### Добавим данных из роутеров
+
+```{r}
+routers_dist <- readr::read_csv("https://storage.yandexcloud.net/roadgraph/marshruts_lengts.csv")
+
+# rdst <- routers_dist %>% 
+#   tidyr::separate_wider_delim(from, delim = " ", names = c("lat1", "lon1")) %>% 
+#   tidyr::separate_wider_delim(to, delim = " ", names = c("lat2", "lon2")) %>% 
+#   mutate(lat1 = round(lat1 %>% as.numeric(),digits = 5))
+```
+
+
+
+## 

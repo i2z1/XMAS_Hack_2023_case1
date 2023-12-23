@@ -1,0 +1,7 @@
+---
+title: "DSFans_XMASHack"
+---
+
+Сайт проекта команды DSFans
+
+![](img/xmashack_logo.jpg){width=50%}
