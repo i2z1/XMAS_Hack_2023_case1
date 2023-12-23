@@ -2,3 +2,32 @@
 title: "Clickhouse магия"
 
 ---
+
+## Подключение
+
+```{r}
+#| eval: true
+library(RClickhouse)
+
+con <- DBI::dbConnect(RClickhouse::clickhouse(), host="localhost",
+                      port = 9000,
+                      dbname = "WIFI",
+                      user = "default",
+                      password = "useruser", compression = "lz4")
+```
+
+У нас много строк даже после очистки:
+
+```{r}
+DBI::dbGetQuery(con, "SELECT count(*)
+                             FROM mainlog")
+```
+
+Пример данных
+
+```{r}
+res <- DBI::dbGetQuery(con, "SELECT (*)
+                             FROM mainlog limit 10")
+knitr::kable(res)
+```
+
